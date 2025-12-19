@@ -1,6 +1,10 @@
 ﻿namespace MoodleSystem.Domain.Persistence.Common
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork
     {
+        Task CreateTransactionAsync();
+        Task CommitAsync();
+        Task RollBack();
+        Task SaveChangesAsync();
     }
 }

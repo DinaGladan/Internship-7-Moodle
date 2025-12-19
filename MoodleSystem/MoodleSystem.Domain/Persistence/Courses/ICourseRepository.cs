@@ -1,6 +1,12 @@
-﻿namespace MoodleSystem.Domain.Persistence.Courses
+﻿using MoodleSystem.Domain.Entities;
+using MoodleSystem.Domain.Persistence.Common;
+
+namespace MoodleSystem.Domain.Persistence.Courses
 {
-    internal interface ICourseRepository
+    public interface ICourseRepository : IRepository<Course, int>
     {
+        Task<Course>GetByNameAsync(string name);
+        Task<IEnumerable<Course>>GetByProfessorIdAsync(int professorId);
+        Task<int>StudentCountAsync(int courseId);
     }
 }
