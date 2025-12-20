@@ -8,6 +8,7 @@ namespace MoodleSystem.Infrastructure.Persistence
         public MoodleDbContext(DbContextOptions<MoodleDbContext> options) : base(options) { }  // predstavlja spajanje s bazom
 
         public DbSet<User> Users { get; set; } = null!; // predstavlja tablicu u bazi
+        //public DbSet<User> Users => Set<User>(); //moze i ovako kao na videu
         public DbSet<Course> Courses { get; set; } = null!;
         public DbSet<Announcement> Announcements { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
