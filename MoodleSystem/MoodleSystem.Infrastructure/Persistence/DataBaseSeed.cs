@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoodleSystem.Domain.Abstractions.Services;
 using MoodleSystem.Domain.Entities;
 using MoodleSystem.Domain.Enumerations;
 
@@ -7,142 +6,178 @@ namespace MoodleSystem.Infrastructure.Persistence
 {
     public static class DataBaseSeed
     {
-        public static async Task InitializeAsync(MoodleDbContext context)
+        public static void SeedData(ModelBuilder modelBuilder)
         {
-            if (context.Users.Any())
-                return;
-
-            var admin = new User(
-                firstName: "Lolek",
-                lastName: "Bokic",
-                email: "admin@fesb.hr",
-                passwor:
+            modelBuilder.Entity<User>().HasData(
+                new User(
+                    firstName: "Lolek",
+                    lastName: "Bokic",
+                    email: "admin@fesb.hr",
+                    password: "ananas"
+                )
+                {
+                    Id = 1,
+                    Role = UserRole.Admin
+                },
+                new User(
+                    firstName: "Boban",
+                    lastName: "Porke",
+                    email: "profesorr@fesb.hr",
+                    password: "ananas"
+                )
+                {
+                    Id = 2,
+                    Role = UserRole.Professor
+                },
+                new User(
+                    firstName: "Ivica",
+                    lastName: "Porke",
+                    email: "elprofesorr@fesb.hr",
+                    password: "ananas"
+                )
+                {
+                    Id = 3,
+                    Role = UserRole.Professor
+                },
+                new User(
+                    firstName: "Dina",
+                    lastName: "Gladan",
+                    email: "dinastud@fesb.hr",
+                    password: "ananas"
+                )
+                {
+                    Id = 4,
+                    Role = UserRole.Student
+                },
+                new User(
+                    firstName: "Duje",
+                    lastName: "Nincevic",
+                    email: "dujestud@fesb.hr",
+                    password: "ananas"
+                )
+                {
+                    Id = 5,
+                    Role = UserRole.Student
+                }
             );
-            admin.SetRole(UserRole.Admin);
 
-            var professor = new User(
-                firstName: "Ana",
-                lastName: "Lokic",
-                email: "prof@fesb.hr",
-                passwordHash:
+            modelBuilder.Entity<Course>().HasData(
+                new Course(
+                    name: "Programiranje",
+                    professorId: 2
+                )
+                {
+                    Id = 1
+                },
+                new Course(
+                    name: "Programiranje za Unix",
+                    professorId: 2
+                )
+                {
+                    Id = 2
+                },
+                new Course(
+                    name: "Programiranje za Internet",
+                    professorId: 3
+                )
+                {
+                    Id = 3
+                }
             );
 
-            professor.SetRole(UserRole.Professor);
-
-            var student1 = new User(
-                firstName: "Dina",
-                lastName: "Gladan",
-                email: "student1@fesb.hr",
-                password:
+            modelBuilder.Entity<UserCourse>().HasData(
+                new
+                {
+                    CourseId = 1,
+                    UserId = 4
+                },
+                new
+                {
+                    CourseId = 1,
+                    UserId = 5
+                }
             );
 
-            var student2 = new User(
-                firstName: "Duje",
-                lastName: "Ivkovic",
-                email: "student2@fesb.hr",
+            modelBuilder.Entity<Material>().HasData(
+                new Material(
+                    name: "Materijal1",
+                    courseId: 1,
+                    url: "https://url1.hr"
+                )
+                {
+                    Id = 1
+                },
+                new Material(
+                    name: "Materijal2",
+                    courseId: 2,
+                    url: "https://url2.hr"
+                )
+                {
+                    Id = 2
+                },
+                new Material(
+                    name: "Materijal3",
+                    courseId: 3,
+                    url: "https://url3.hr"
+                )
+                {
+                    Id = 3
+                }
             );
 
-            context.Users.AddRange(admin, professor, student1, student2);
-            await context.SaveChangesAsync();
-
-            var course1 = new Course(
-                name: "Programiranje za Internet",
-                professorId: professor.Id
+            modelBuilder.Entity<PrivateMessage>().HasData(
+                new PrivateMessage(
+                    content: "Sadrzaj privatne poruke 1",
+                    senderId: 1,
+                    receiverId: 2
+                )
+                {
+                    Id= 1
+                },
+                new PrivateMessage(
+                    content: "Sadrzaj privatne poruke 2",
+                    senderId: 1,
+                    receiverId: 3
+                )
+                {
+                    Id = 2
+                },
+                new PrivateMessage(
+                    content: "Sadrzaj privatne poruke 3",
+                    senderId: 2,
+                    receiverId: 1
+                )
+                {
+                    Id = 3
+                }
             );
 
-            var course2 = new Course(
-                name: "Baze podataka",
-                professorId: professor.Id
+            modelBuilder.Entity<Announcement>().HasData(
+                new Announcement(
+                    title: "Kolokvij1",
+                    content: "sadrzaj 1 annon",
+                    courseId: 1
+                )
+                {
+                    Id = 1
+                },
+                new Announcement(
+                    title: "Kolokvij2",
+                    content: "sadrzaj 2 annon",
+                    courseId: 2
+                )
+                {
+                    Id = 2
+                },
+                new Announcement(
+                    title: "Kolokvij3",
+                    content: "sadrzaj 3 annon",
+                    courseId: 1
+                )
+                {
+                    Id = 3
+                }
             );
-
-            var course3 = new Course(
-                name: "Programiranje",
-                professorId: professor.Id
-            );
-
-            context.Courses.AddRange(course1, course2, course3);
-            await context.SaveChangesAsync();
-
-            var material1 = new Material(
-                name: "Materijal1",
-                courseId: course1.Id,
-                url: "https://url1.hr"
-                );
-
-            var material2 = new Material(
-                name: "Materijal2",
-                courseId: course1.Id,
-                url: "https://url2.hr"
-                );
-
-            var material3 = new Material(
-                name: "Materijal3",
-                courseId: course1.Id,
-                url: "https://url3.hr"
-                );
-
-            var userCourse1 = new UserCourse(
-                courseId: course2.Id,
-                userId: student1.Id
-                );
-
-            var userCourse2 = new UserCourse(
-                courseId: course1.Id,
-                userId: student1.Id
-                );
-
-            var userCourse3 = new UserCourse(
-                courseId: course1.Id,
-                userId: student2.Id
-                );
-
-            context.UserCourses.AddRange(userCourse1, userCourse2, userCourse3);
-            await context.SaveChangesAsync();
-
-            context.Materials.AddRange(material1, material2, material3);
-            await context.SaveChangesAsync();
-
-            var privateMessage1 = new PrivateMessage(
-                content: "prva poruka",
-                receiverId: student1.Id,
-                senderId: student2.Id
-                );
-
-            var privateMessage2 = new PrivateMessage(
-                content: "druga poruka",
-                receiverId: professor.Id,
-                senderId: student2.Id
-                );
-
-            var privateMessage3 = new PrivateMessage(
-                content: "treca poruka",
-                receiverId: admin.Id,
-                senderId: professor.Id
-                );
-
-            context.PrivateMessages.AddRange(privateMessage1, privateMessage2, privateMessage3);
-            await context.SaveChangesAsync();
-
-            var announcement1 = new Announcement(
-                title: "Test1",
-                content: "sadrzaj 1 annon",
-                courseId: course1.Id
-                );
-            var announcement2 = new Announcement(
-                title: "Test2",
-                content: "sadrzaj 2 annon",
-                courseId: course1.Id
-                );
-            var announcement3 = new Announcement(
-                title: "Test3",
-                content: "sadrzaj 3 annon",
-                courseId: course2.Id
-                );
-
-            context.Announcements.AddRange(announcement1, announcement2, announcement3);
-            await context.SaveChangesAsync();
-
         }
-
     }
 }

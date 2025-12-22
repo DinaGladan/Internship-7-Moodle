@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MoodleSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(MoodleDbContext))]
-    [Migration("20251221225232_first_migration")]
-    partial class first_migration
+    [Migration("20251222172541_seed_initial_data3")]
+    partial class seed_initial_data3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,32 @@ namespace MoodleSystem.Infrastructure.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("announcements", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Content = "sadrzaj 1 annon",
+                            CourseId = 1,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7937),
+                            Title = "Kolokvij1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "sadrzaj 2 annon",
+                            CourseId = 2,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7939),
+                            Title = "Kolokvij2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "sadrzaj 3 annon",
+                            CourseId = 1,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7940),
+                            Title = "Kolokvij3"
+                        });
                 });
 
             modelBuilder.Entity("MoodleSystem.Domain.Entities.Course", b =>
@@ -94,6 +120,29 @@ namespace MoodleSystem.Infrastructure.Migrations
                     b.HasIndex("ProfessorId");
 
                     b.ToTable("courses", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7862),
+                            Name = "Programiranje",
+                            ProfessorId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7863),
+                            Name = "Programiranje za Unix",
+                            ProfessorId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7864),
+                            Name = "Programiranje za Internet",
+                            ProfessorId = 3
+                        });
                 });
 
             modelBuilder.Entity("MoodleSystem.Domain.Entities.Material", b =>
@@ -131,6 +180,32 @@ namespace MoodleSystem.Infrastructure.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("materials", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CourseId = 1,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7899),
+                            Name = "Materijal1",
+                            Url = "https://url1.hr"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CourseId = 2,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7901),
+                            Name = "Materijal2",
+                            Url = "https://url2.hr"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CourseId = 3,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7902),
+                            Name = "Materijal3",
+                            Url = "https://url3.hr"
+                        });
                 });
 
             modelBuilder.Entity("MoodleSystem.Domain.Entities.PrivateMessage", b =>
@@ -169,6 +244,32 @@ namespace MoodleSystem.Infrastructure.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("private_messages", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Content = "Sadrzaj privatne poruke 1",
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7916),
+                            ReceiverId = 2,
+                            SenderId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Sadrzaj privatne poruke 2",
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7917),
+                            ReceiverId = 3,
+                            SenderId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Sadrzaj privatne poruke 3",
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7918),
+                            ReceiverId = 1,
+                            SenderId = 2
+                        });
                 });
 
             modelBuilder.Entity("MoodleSystem.Domain.Entities.UserCourse", b =>
@@ -186,6 +287,18 @@ namespace MoodleSystem.Infrastructure.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("user_courses", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 4,
+                            CourseId = 1
+                        },
+                        new
+                        {
+                            UserId = 5,
+                            CourseId = 1
+                        });
                 });
 
             modelBuilder.Entity("User", b =>
@@ -221,11 +334,11 @@ namespace MoodleSystem.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("last_name");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("password_hash");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("password");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer")
@@ -237,6 +350,58 @@ namespace MoodleSystem.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("users", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7757),
+                            Email = "admin@fesb.hr",
+                            FirstName = "Lolek",
+                            LastName = "Bokic",
+                            Password = "ananas",
+                            Role = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7761),
+                            Email = "profesorr@fesb.hr",
+                            FirstName = "Boban",
+                            LastName = "Porke",
+                            Password = "ananas",
+                            Role = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7762),
+                            Email = "elprofesorr@fesb.hr",
+                            FirstName = "Ivica",
+                            LastName = "Porke",
+                            Password = "ananas",
+                            Role = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7764),
+                            Email = "dinastud@fesb.hr",
+                            FirstName = "Dina",
+                            LastName = "Gladan",
+                            Password = "ananas",
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 22, 17, 25, 41, 336, DateTimeKind.Utc).AddTicks(7765),
+                            Email = "dujestud@fesb.hr",
+                            FirstName = "Duje",
+                            LastName = "Nincevic",
+                            Password = "ananas",
+                            Role = 1
+                        });
                 });
 
             modelBuilder.Entity("MoodleSystem.Domain.Entities.Announcement", b =>

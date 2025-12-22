@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MoodleSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class first_migration : Migration
+    public partial class seed_initial_data2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,7 @@ namespace MoodleSystem.Infrastructure.Migrations
                     first_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     last_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    password_hash = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     role = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },

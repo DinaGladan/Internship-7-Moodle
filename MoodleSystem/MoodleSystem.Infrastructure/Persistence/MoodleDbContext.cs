@@ -20,7 +20,7 @@ namespace MoodleSystem.Infrastructure.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MoodleDbContext).Assembly);
 
             modelBuilder.HasDefaultSchema("public");
-            // DataBaseSeed.Seed(modelBuilder); //ne moze kao na predavanju zbog hash u useru
+            DataBaseSeed.SeedData(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
     }

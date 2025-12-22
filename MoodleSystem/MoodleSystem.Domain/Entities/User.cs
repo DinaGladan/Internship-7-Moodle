@@ -8,7 +8,7 @@ public class User : BaseEntity
     public string LastName { get; private set; }
     public string Email { get; private set; } = null!;
     public string Password { get; private set; }
-    public UserRole Role { get; private set; }
+    public UserRole Role { get; init; }
 
     public ICollection<UserCourse> Enrollments { get; private set; } = new List<UserCourse>();
     public ICollection<PrivateMessage> SentMessages { get; private set; } = new List<PrivateMessage>();
@@ -23,10 +23,5 @@ public class User : BaseEntity
         Email = email;
         Password = password;
         Role = UserRole.Student;
-    }
-
-    public void SetRole(UserRole role)
-    {
-        Role = role;
     }
 }
