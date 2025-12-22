@@ -1,4 +1,4 @@
-﻿using MoodleSystem.Domain.Common;
+﻿using MoodleSystem.Domain.Abstractions;
 using MoodleSystem.Domain.Entities;
 using MoodleSystem.Domain.Enumerations;
 
@@ -7,7 +7,7 @@ public class User : BaseEntity
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string Email { get; private set; } = null!;
-    public string PasswordHash { get; private set; }
+    public string Password { get; private set; }
     public UserRole Role { get; private set; }
 
     public ICollection<UserCourse> Enrollments { get; private set; } = new List<UserCourse>();
@@ -16,12 +16,17 @@ public class User : BaseEntity
 
     private User() { }
 
-    public User(string firstName, string lastName, string email, string passwordHash)
+    public User(string firstName, string lastName, string email, string password)
     {
         FirstName = firstName;
         LastName = lastName;
         Email = email;
-        PasswordHash = passwordHash;
+        Password = password;
         Role = UserRole.Student;
+    }
+
+    public void SetRole(UserRole role)
+    {
+        Role = role;
     }
 }

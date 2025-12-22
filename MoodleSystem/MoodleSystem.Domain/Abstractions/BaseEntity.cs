@@ -1,4 +1,4 @@
-﻿namespace MoodleSystem.Domain.Common
+﻿namespace MoodleSystem.Domain.Abstractions
 {
     public class BaseEntity
     {

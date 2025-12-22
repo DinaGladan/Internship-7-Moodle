@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MoodleSystem.Domain.Entities;
 
 namespace MoodleSystem.Infrastructure.Persistence.Configurations
 {
@@ -8,7 +7,7 @@ namespace MoodleSystem.Infrastructure.Persistence.Configurations
     {
         public const int NameMaxLength = 100;
         public const int EmailMaxLength = 255;
-        public const int PasswordHashMaxLength = 256;
+        public const int PasswordMaxLength = 100;
         public void Configure(EntityTypeBuilder<User> builder)
         {
 
@@ -37,10 +36,10 @@ namespace MoodleSystem.Infrastructure.Persistence.Configurations
             builder.HasIndex(u => u.Email)
                 .IsUnique();
 
-            builder.Property(u => u.PasswordHash)
+            builder.Property(u => u.Password)
                 .IsRequired()
-                .HasMaxLength(PasswordHashMaxLength)
-                .HasColumnName("password_hash");
+                .HasMaxLength(PasswordMaxLength)
+                .HasColumnName("password");
 
             builder.Property(u => u.Role)
                 .HasConversion<int>()

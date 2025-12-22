@@ -1,4 +1,4 @@
-﻿using MoodleSystem.Domain.Common;
+﻿using MoodleSystem.Domain.Abstractions;
 
 namespace MoodleSystem.Domain.Entities
 {
