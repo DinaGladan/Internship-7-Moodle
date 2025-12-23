@@ -1,6 +1,6 @@
-﻿namespace MoodleSystem.Application.DTO
+﻿namespace MoodleSystem.Application.Common.Model.Register
 {
-    public class RegisterDTO
+    public class RegisterRequest
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
