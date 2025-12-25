@@ -1,5 +1,4 @@
-﻿using MoodleSystem.Domain.Common;
-namespace MoodleSystem.Domain.Entities
+﻿namespace MoodleSystem.Domain.Entities
 {
     public class UserCourse
     {
