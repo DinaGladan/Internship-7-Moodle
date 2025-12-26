@@ -4,15 +4,15 @@ using MoodleSystem.Domain.Persistence.Courses;
 
 namespace MoodleSystem.Application.Student.MyCourses
 {
-    public class MyCoursesRequestHandler
+    public class MyCoursesStudentRequestHandler
     {
         private readonly ICourseRepository _courseRepository;
-        public MyCoursesRequestHandler(ICourseRepository courseRepository)
+        public MyCoursesStudentRequestHandler(ICourseRepository courseRepository)
         {
             _courseRepository = courseRepository;
         }
 
-        public async Task<MyCoursesResponse> StudentHandler()
+        public async Task<MyCoursesStudentResponse> StudentHandler()
         {
             var studentId = CurrentUser.User!.Id;
             var courses = await _courseRepository.GetAllAsync();
@@ -28,7 +28,7 @@ namespace MoodleSystem.Application.Student.MyCourses
                 })
                 .ToList();
 
-            return new MyCoursesResponse
+            return new MyCoursesStudentResponse
             {
                 Courses = studentCourses
             };

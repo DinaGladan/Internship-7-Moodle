@@ -2,7 +2,7 @@
 
 namespace MoodleSystem.Application.Student.MyCourses
 {
-    public class MyCoursesResponse
+    public class MyCoursesStudentResponse
     {
         public List<StudentCoursesDTO> Courses { get; init; } = new();
     }
