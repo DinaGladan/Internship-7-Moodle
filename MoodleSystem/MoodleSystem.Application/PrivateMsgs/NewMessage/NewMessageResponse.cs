@@ -1,4 +1,4 @@
-﻿namespace MoodleSystem.Application.NewMessage
+﻿namespace MoodleSystem.Application.PrivateMsgs.NewMessage
 {
     public class NewMessageResponse
     {

@@ -2,7 +2,7 @@
 using MoodleSystem.Application.DTO;
 using MoodleSystem.Domain.Persistence.PrivateMessages;
 
-namespace MoodleSystem.Application.ChatScreen
+namespace MoodleSystem.Application.PrivateMsgs.ChatScreen
 {
     public class ChatScreenRequestHandler
     {

@@ -1,6 +1,6 @@
 ﻿using MoodleSystem.Application.DTO;
 
-namespace MoodleSystem.Application.MyPrivateMessages
+namespace MoodleSystem.Application.PrivateMsgs.MyPrivateMessages
 {
     public class MyPrivateMessagesResponse
     {

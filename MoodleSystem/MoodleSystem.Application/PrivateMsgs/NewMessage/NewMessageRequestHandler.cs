@@ -2,7 +2,7 @@
 using MoodleSystem.Domain.Entities;
 using MoodleSystem.Domain.Persistence.Common;
 
-namespace MoodleSystem.Application.NewMessage
+namespace MoodleSystem.Application.PrivateMsgs.NewMessage
 {
     public class NewMessageRequestHandler
     {
@@ -13,7 +13,7 @@ namespace MoodleSystem.Application.NewMessage
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<NewMessageResponse> MessageHandler( NewMessageRequest req)
+        public async Task<NewMessageResponse> MessageHandler(NewMessageRequest req)
         {
             var senderId = CurrentUser.User!.Id;
 
@@ -26,7 +26,7 @@ namespace MoodleSystem.Application.NewMessage
             _unitOfWork.PrivateMessages.InsertAsync(message);
             await _unitOfWork.SaveChangesAsync();
 
-            return new NewMessageResponse { Success = true};
+            return new NewMessageResponse { Success = true };
 
         }
     }

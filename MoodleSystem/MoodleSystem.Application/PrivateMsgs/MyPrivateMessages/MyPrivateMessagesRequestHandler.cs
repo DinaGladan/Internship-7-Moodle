@@ -2,7 +2,7 @@
 using MoodleSystem.Application.DTO;
 using MoodleSystem.Domain.Persistence.PrivateMessages;
 
-namespace MoodleSystem.Application.MyPrivateMessages
+namespace MoodleSystem.Application.PrivateMsgs.MyPrivateMessages
 {
     public class MyPrivateMessagesRequestHandler
     {

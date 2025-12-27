@@ -1,6 +1,6 @@
 ﻿using MoodleSystem.Application.DTO;
 
-namespace MoodleSystem.Application.ChatScreen
+namespace MoodleSystem.Application.PrivateMsgs.ChatScreen
 {
     public class ChatScreenResponse
     {
