@@ -24,4 +24,9 @@ public class User : BaseEntity
         Password = password;
         Role = UserRole.Student;
     }
+
+    public void  UpdateUserEmail(string newEmail)
+    {
+        Email = newEmail;
+    }
 }
