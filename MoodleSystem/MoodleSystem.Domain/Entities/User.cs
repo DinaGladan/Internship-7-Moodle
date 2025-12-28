@@ -8,7 +8,7 @@ public class User : BaseEntity
     public string LastName { get; private set; }
     public string Email { get; private set; } = null!;
     public string Password { get; private set; }
-    public UserRole Role { get; init; }
+    public UserRole Role { get;  set; }
 
     public ICollection<UserCourse> Enrollments { get; private set; } = new List<UserCourse>();
     public ICollection<PrivateMessage> SentMessages { get; private set; } = new List<PrivateMessage>();
@@ -28,5 +28,10 @@ public class User : BaseEntity
     public void  UpdateUserEmail(string newEmail)
     {
         Email = newEmail;
+    }
+
+    public void UpdateUserRole(UserRole newUserRole)
+    {
+        Role = newUserRole;
     }
 }
