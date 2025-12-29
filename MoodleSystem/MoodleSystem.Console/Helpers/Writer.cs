@@ -1,6 +1,6 @@
 ﻿namespace MoodleSystem.Console.Helpers
 {
-    public class Writer
+    public static class Writer
     {
         public static void DisplayMenu(string title, Dictionary<string, (string Description, Func<Task<bool>> Action)> options)
         {
@@ -15,7 +15,11 @@
         {
             System.Console.WriteLine(message);
         }
-
+        public static void WriteHeader(string header)
+        {
+            System.Console.Clear();
+            System.Console.WriteLine(header);
+        }
         public static void WaitForKey()
         {
             System.Console.WriteLine("Pritisnite bilo koju tipku za nastavak...");

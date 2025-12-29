@@ -36,17 +36,12 @@ namespace MoodleSystem.Console.Views
 
         public async Task HandleLogIn()
         {
-
+            await _userActions.LogInAsync();
         }
 
         public async Task HandleRegister()
         {
-
-        }
-
-        public async Task HandleExit()
-        {
-
+            await _userActions.RegisterAsync();
         }
     }
 }

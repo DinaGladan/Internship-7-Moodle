@@ -1,6 +1,6 @@
 ﻿namespace MoodleSystem.Console.Helpers
 {
-    public class Reader
+    public static class Reader
     {
         public static string ReadLine()
         {
