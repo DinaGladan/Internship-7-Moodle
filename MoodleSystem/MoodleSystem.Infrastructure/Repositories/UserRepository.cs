@@ -29,6 +29,21 @@ namespace MoodleSystem.Infrastructure.Repositories
                 .OrderBy(u => u.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<User>> GetUsersWithoutChatAsync(int currentUserId)
+        {
+            var chattedUserIds = await _moodleDb.PrivateMessages
+                .Where(pm => pm.SenderId == currentUserId || pm.ReceiverId == currentUserId)
+                .Select(pm => pm.SenderId == currentUserId ? pm.ReceiverId : pm.SenderId)
+                .Distinct()
+                .ToListAsync();
+
+            return await _moodleDb.Users
+                .Where(u => u.Id != currentUserId && !chattedUserIds.Contains(u.Id))
+                .OrderBy(u => u.FirstName)
+                .ToListAsync();
+        }
+
     }
 }
 

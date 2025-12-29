@@ -17,24 +17,28 @@ namespace MoodleSystem.Application.PrivateMsgs.MyPrivateMessages
         {
             var userId = CurrentUser.User!.Id;
 
-            var messages = await _messageRepository.GetConversationAsync(userId, userId);
+            var messages = (await _messageRepository.GetMyMessagesAsync(userId)).ToList();
 
-            var myPrivateMesseges = messages.GroupBy(m => m.SenderId == userId ? m.Receiver : m.Sender)
+            var conversations = messages
+                .GroupBy(m => m.SenderId == userId ? m.ReceiverId : m.SenderId)
                 .Select(g =>
                 {
-                    var lastmsg = g.OrderByDescending(m => m.CreatedAt).First();
+                    var lastMsg = g.OrderByDescending(m => m.CreatedAt).First();
+
+                    var otherUser = lastMsg.SenderId == userId ? lastMsg.Receiver : lastMsg.Sender;
+
                     return new MyPrivateMessagesDTO
                     {
-                        UserId = g.Key.Id,
-                        FullName = $"{g.Key.FirstName} {g.Key.LastName}",
-                        CreatedAt = lastmsg.CreatedAt,
-                        Content = lastmsg.Content
+                        UserId = otherUser.Id,
+                        FullName = $"{otherUser.FirstName} {otherUser.LastName}",
+                        CreatedAt = lastMsg.CreatedAt,
+                        Content = lastMsg.Content
                     };
                 })
-                .OrderByDescending(m => m.CreatedAt)
+                .OrderByDescending(x => x.CreatedAt)
                 .ToList();
 
-            return new MyPrivateMessagesResponse { PrivateMessages = myPrivateMesseges };
+            return new MyPrivateMessagesResponse { PrivateMessages = conversations };
         }
     }
 }

@@ -7,6 +7,7 @@ namespace MoodleSystem.Domain.Persistence.PrivateMessages
     {
         Task<IEnumerable<PrivateMessage>>GetConversationAsync(int senderId, int receiverId);
         Task<int> GetSentMessagesCount(int senderId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<PrivateMessage>> GetMyMessagesAsync(int userId);
 
     }
 }

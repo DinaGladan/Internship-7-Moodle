@@ -1,5 +1,4 @@
 ﻿using MoodleSystem.Application.Common.Model;
-using MoodleSystem.Console.Views;
 
 namespace MoodleSystem.Console.Views
 {

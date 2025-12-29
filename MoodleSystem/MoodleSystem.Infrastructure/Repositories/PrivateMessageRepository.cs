@@ -13,11 +13,14 @@ namespace MoodleSystem.Infrastructure.Repositories
             _moodleDb = moodleDb;
         }
 
-        public async Task<IEnumerable<PrivateMessage>> GetConversationAsync(int senderId, int receiverId)
+        public async Task<IEnumerable<PrivateMessage>> GetConversationAsync(int me, int other)
         {
             return await _moodleDb.PrivateMessages
-                .Where(pm => (pm.SenderId == senderId && pm.ReceiverId == receiverId) ||
-                (pm.SenderId == receiverId && pm.ReceiverId == senderId))
+                .Where(pm =>
+                    (pm.SenderId == me && pm.ReceiverId == other) ||
+                    (pm.SenderId == other && pm.ReceiverId == me))
+                .Include(pm => pm.Sender)
+                .Include(pm => pm.Receiver)
                 .OrderBy(pm => pm.CreatedAt)
                 .ToListAsync();
         }
@@ -27,5 +30,18 @@ namespace MoodleSystem.Infrastructure.Repositories
                 .Where(pm => pm.SenderId == senderId && pm.CreatedAt >= startDate && pm.CreatedAt <= endDate)
                 .CountAsync();
         }
+
+        public async Task<IEnumerable<PrivateMessage>> GetMyMessagesAsync(int userId)
+        {
+            return await _moodleDb.PrivateMessages
+                .Where(pm => pm.SenderId == userId || pm.ReceiverId == userId)
+                .Include(pm => pm.Sender)
+                .Include(pm => pm.Receiver)
+                .OrderBy(pm => pm.CreatedAt)
+                .ToListAsync();
+        }
+
+
+
     }
 }

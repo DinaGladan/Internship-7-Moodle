@@ -15,9 +15,9 @@ namespace MoodleSystem.Application.Student.MyCourses
         public async Task<MyCoursesStudentResponse> StudentHandler()
         {
             var studentId = CurrentUser.User!.Id;
-            var courses = await _courseRepository.GetAllAsync();
+            var courses = await _courseRepository.GetAllWithEnrollmentsAsync();
 
-            var studentCourses = courses.Values
+            var studentCourses = courses
                 .Where(c => c.Enrollments.Any(e => e.UserId == studentId))
                 .OrderBy(c => c.Name)
                 .Select(c => new StudentCoursesDTO

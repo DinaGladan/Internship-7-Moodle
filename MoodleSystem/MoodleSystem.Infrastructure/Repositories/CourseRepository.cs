@@ -31,5 +31,13 @@ namespace MoodleSystem.Infrastructure.Repositories
         {
             return await _moodleDb.UserCourses.CountAsync(uc => uc.CourseId == courseId);
         }
+        public async Task<IEnumerable<Course>> GetAllWithEnrollmentsAsync()
+        {
+            return await _moodleDb.Courses
+                .Include(c => c.Enrollments)
+                .Include(c => c.Professor)
+                .ToListAsync();
+        }
+
     }
 }

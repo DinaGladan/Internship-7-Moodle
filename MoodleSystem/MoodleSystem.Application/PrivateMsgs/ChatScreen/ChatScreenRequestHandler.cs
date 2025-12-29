@@ -1,6 +1,7 @@
 ﻿using MoodleSystem.Application.Common.Model;
 using MoodleSystem.Application.DTO;
 using MoodleSystem.Domain.Persistence.PrivateMessages;
+using MoodleSystem.Infrastructure.Repositories;
 
 namespace MoodleSystem.Application.PrivateMsgs.ChatScreen
 {
@@ -16,20 +17,23 @@ namespace MoodleSystem.Application.PrivateMsgs.ChatScreen
         public async Task<ChatScreenResponse> MsgsHandler(ChatScreenRequest req)
         {
             var userId = CurrentUser.User!.Id;
+            var otherUserId = req.AnotherUserId;
 
-            var conversations = await _privateMessage.GetConversationAsync(userId, req.AnotherUser);
+            var messages = await _privateMessage.GetConversationAsync(userId, otherUserId);
 
             return new ChatScreenResponse
             {
-                Conversations = conversations.OrderBy(m => m.CreatedAt)
-                .Select(m => new ChatScreenDTO
-                {
-                    IsMine = m.SenderId == userId,
-                    Content = m.Content,
-                    SentAt = m.CreatedAt
-                })
-                .ToList()
+                Conversations = messages
+                    .OrderBy(m => m.CreatedAt)
+                    .Select(m => new ChatScreenDTO
+                    {
+                        IsMine = m.SenderId == userId,
+                        Content = m.Content,
+                        SentAt = m.CreatedAt
+                    })
+                    .ToList()
             };
         }
+
     }
 }

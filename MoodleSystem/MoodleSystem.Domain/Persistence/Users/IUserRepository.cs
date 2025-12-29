@@ -8,6 +8,7 @@ namespace MoodleSystem.Domain.Persistence.Users
         Task<User?> GetByEmailAsync(string email);
         Task<bool> DoesEmailExistsAsync(string email);
         Task<IEnumerable<User>> GetByRoleAsync(UserRole role);
+        Task<IEnumerable<User>> GetUsersWithoutChatAsync(int currentUserId);
     }
 }
 

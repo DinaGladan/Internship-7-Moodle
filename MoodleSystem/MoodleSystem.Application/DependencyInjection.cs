@@ -44,6 +44,7 @@ namespace MoodleSystem.Application
             services.AddScoped<ChatScreenRequestHandler>();
             services.AddScoped<MyPrivateMessagesRequestHandler>();
             services.AddScoped<NewMessageRequestHandler>();
+            services.AddScoped<NewMessageUsersRequestHandler>();
 
             services.AddScoped<AddAnnouncementRequestHandler>();
             services.AddScoped<AddMaterialRequestHandler>();

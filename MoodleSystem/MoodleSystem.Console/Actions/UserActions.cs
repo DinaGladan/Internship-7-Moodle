@@ -1,4 +1,5 @@
-﻿using MoodleSystem.Application.Common.Model.LogIn;
+﻿using MoodleSystem.Application.Common.Model;
+using MoodleSystem.Application.Common.Model.LogIn;
 using MoodleSystem.Application.Common.Model.Register;
 using MoodleSystem.Application.Validation;
 using MoodleSystem.Console.Helpers;
@@ -16,7 +17,7 @@ namespace MoodleSystem.Console.Actions
             _registerRequestHandler = registerRequestHandler;
         }
 
-        public async Task LogInAsync() {
+        public async Task<bool> LogInAsync() {
             Writer.WriteHeader("LOGIN");
 
             var email = Reader.ReadInput("Email: ");
@@ -33,11 +34,17 @@ namespace MoodleSystem.Console.Actions
             {
                 Writer.WriteMessage(response.Message);
                 Writer.WaitForKey();
-                return;
+                return false;
             }
+
+            CurrentUser.Set(response.User);
+            Writer.WriteMessage($"DEBUG AFTER LOGIN: CurrentUser = {CurrentUser.User?.Email}");
+            Writer.WaitForKey();
+
 
             Writer.WriteMessage("Uspjesna prijava");
             Writer.WaitForKey();
+            return true;
         }
         public async Task RegisterAsync() {
             Writer.WriteHeader("REGISTRACIJA");

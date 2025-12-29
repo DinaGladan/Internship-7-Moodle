@@ -2,6 +2,6 @@
 {
     public class ChatScreenRequest
     {
-        public int AnotherUser { get; init; }
+        public int AnotherUserId { get; init; }
     }
 }
