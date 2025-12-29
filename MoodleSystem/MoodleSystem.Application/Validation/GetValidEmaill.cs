@@ -7,7 +7,7 @@ namespace MoodleSystem.Application.Validation
         public static bool IsEmailValid(string email)
         {
             string pattern = @"^\S+@\S{2,}\.\S{3,}$";
-            return Regex.IsMatch( pattern, email);
+            return Regex.IsMatch( email, pattern);
         }
 
     }

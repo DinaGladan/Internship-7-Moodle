@@ -1,4 +1,5 @@
 ﻿using MoodleSystem.Application.Validation;
+using MoodleSystem.Domain.Persistence.Common;
 using MoodleSystem.Domain.Persistence.Users;
 
 namespace MoodleSystem.Application.Common.Model.Register
@@ -6,10 +7,12 @@ namespace MoodleSystem.Application.Common.Model.Register
     public class RegisterRequestHandler
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public RegisterRequestHandler(IUserRepository userRepository)
+        public RegisterRequestHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest req)
@@ -33,7 +36,9 @@ namespace MoodleSystem.Application.Common.Model.Register
                 password: req.Password
                 );
 
-            await _userRepository.InsertAsync(user);
+            await _unitOfWork.Users.InsertAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
             return new RegisterResponse { Success = true};
 
         }
