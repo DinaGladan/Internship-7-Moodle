@@ -1,4 +1,7 @@
-﻿namespace MoodleSystem.Console.Views
+﻿using MoodleSystem.Application.Common.Model;
+using MoodleSystem.Console.Views;
+
+namespace MoodleSystem.Console.Views
 {
     public class MenuOptions
     {
@@ -26,6 +29,34 @@
                 .AddOption("1", "Prijavi se", async () => { await menuManager.HandleLogIn(); System.Console.Clear(); return false; })
                 .AddOption("2", "Registriraj se", async() => { await menuManager.HandleRegister(); System.Console.Clear(); return false; })
                 .AddOption("3", "Izlaz", async () => { System.Console.WriteLine("Izlaz iz aplikacije"); return true; })
+                .Build();
+        }
+
+        public static Dictionary<string, (string Description, Func<Task<bool>> Action)> CreateStudentMenu(MenuManager menuManager)
+        {
+            return new MenuOptions()
+                .AddOption("1", "Moji Kolegiji", async () => { await menuManager.ShowStudentCourses(); return false; })
+                .AddOption("2", "Privatni Chat", async () => { await menuManager.ShowPrivateMessages(); return false; })
+                .AddOption("3", "Odjava", async () => { CurrentUser.Logout(); return true; })
+                .Build();
+        }
+
+        public static Dictionary<string, (string Description, Func<Task<bool>> Action)> CreateProfessorMenu(MenuManager menuManager)
+        {
+            return new MenuOptions()
+                .AddOption("1", "Moji Kolegiji", async () => { await menuManager.ShowProfessorCourses(); return false; })
+                .AddOption("2", "Upravljanje Kolegijima", async () => { await menuManager.ProfessorCourseManagement(); return false; })
+                .AddOption("3", "Privatni Chat", async () => { await menuManager.ShowPrivateMessages(); return false; })
+                .AddOption("4", "Odjava", async () => { CurrentUser.Logout(); return true; })
+                .Build();
+        }
+
+        public static Dictionary<string, (string Description, Func<Task<bool>> Action)> CreateAdminMenu(MenuManager menuManager)
+        {
+            return new MenuOptions()
+                .AddOption("1", "Upravljanje Korisnicima", async () => { await menuManager.AdminUsersManagement(); return false; })
+                .AddOption("2", "Privatni Chat", async () => { await menuManager.ShowPrivateMessages(); return false; })
+                .AddOption("3", "Odjava", async () => { CurrentUser.Logout(); return true; })
                 .Build();
         }
     }

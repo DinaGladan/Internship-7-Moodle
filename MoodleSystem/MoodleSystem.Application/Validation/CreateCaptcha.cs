@@ -1,6 +1,4 @@
-﻿using System.CodeDom.Compiler;
-
-namespace MoodleSystem.Application.Validation
+﻿namespace MoodleSystem.Application.Validation
 {
     public class CreateCaptcha
     {

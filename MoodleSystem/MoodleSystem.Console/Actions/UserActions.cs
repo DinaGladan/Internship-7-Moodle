@@ -1,5 +1,6 @@
 ﻿using MoodleSystem.Application.Common.Model.LogIn;
 using MoodleSystem.Application.Common.Model.Register;
+using MoodleSystem.Application.Validation;
 using MoodleSystem.Console.Helpers;
 
 namespace MoodleSystem.Console.Actions
@@ -46,7 +47,9 @@ namespace MoodleSystem.Console.Actions
             var email = Reader.ReadInput("Email: ");
             var password = Reader.ReadInput("Lozinka: ");
             var confirmPassword = Reader.ReadInput("Ponovite Lozinku: ");
-            var captchaExpected = Guid.NewGuid().ToString("N")[..5];
+
+            var captchaGenerator = new CreateCaptcha();
+            var captchaExpected = captchaGenerator.Generate();
 
             Writer.WriteMessage($"Captcha: {captchaExpected}");
             var captchaInput = Reader.ReadInput("Upisite Captchu: ");
