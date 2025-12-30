@@ -1,5 +1,4 @@
 ﻿using MoodleSystem.Application.DTO;
-using MoodleSystem.Domain.Entities;
 using MoodleSystem.Domain.Persistence.Courses;
 
 namespace MoodleSystem.Application.Student.StudentCoursesScreen
@@ -16,7 +15,7 @@ namespace MoodleSystem.Application.Student.StudentCoursesScreen
         public async Task<StudentCorsesScreenResponse> StudentHandler(StudentCoursesScreenRequest req)
         {
 
-            var course = await _courseRepository.GetByIdAsync(req.CourseId);
+            var course = await _courseRepository.GetByIdWithDetailsAsync(req.CourseId);
 
             var announcements = course!.Announcements
                 .OrderByDescending(a => a.CreatedAt)
