@@ -16,7 +16,9 @@ builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddScoped<MenuManager>();
 builder.Services.AddScoped<UserActions>();
 builder.Services.AddScoped<StudentActions>();
+builder.Services.AddScoped<ProfessorActions>();
 builder.Services.AddScoped <PrivateMessageAction>();
+
 
 var host = builder.Build();
 

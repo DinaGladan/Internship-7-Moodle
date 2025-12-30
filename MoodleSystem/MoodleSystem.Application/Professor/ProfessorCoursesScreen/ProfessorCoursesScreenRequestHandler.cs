@@ -17,7 +17,7 @@ namespace MoodleSystem.Application.Professor.ProfessorCoursesScreen
         {
             var professorId = CurrentUser.User!.Id;
 
-            var course = await _courseRepository.GetByIdAsync(req.CourseId);
+            var course = await _courseRepository.GetByIdWithDetailsAsync(req.CourseId);
 
             if(course == null || course.ProfessorId != professorId)
                 return new ProfessorCoursesScreenResponse();

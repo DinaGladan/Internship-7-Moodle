@@ -2,6 +2,7 @@
 using MoodleSystem.Application.Common.Model;
 using MoodleSystem.Console.Actions;
 using MoodleSystem.Console.Helpers;
+using MoodleSystem.Domain.Entities;
 
 namespace MoodleSystem.Console.Views
 {
@@ -10,13 +11,16 @@ namespace MoodleSystem.Console.Views
         private readonly UserActions _userActions;
         private readonly DashRequestHandler _dashRequestHandler;
         private readonly StudentActions _studentActions;
+        private readonly ProfessorActions _professorActions;
         private readonly PrivateMessageAction _privateMessageAction;
 
-        public MenuManager(UserActions userActions, DashRequestHandler dashRequestHandler, StudentActions studentActions, PrivateMessageAction privateMessageAction) {  
+        public MenuManager(UserActions userActions, DashRequestHandler dashRequestHandler, StudentActions studentActions, PrivateMessageAction privateMessageAction, ProfessorActions professorActions)
+        {
             _userActions = userActions;
             _dashRequestHandler = dashRequestHandler;
             _studentActions = studentActions;
             _privateMessageAction = privateMessageAction;
+            _professorActions = professorActions;
         }
 
         public async Task RunAsync()
@@ -49,8 +53,8 @@ namespace MoodleSystem.Console.Views
                 return;
 
             var dash = _dashRequestHandler.DashHandler();
-            
-            switch(dash.Type)
+
+            switch (dash.Type)
             {
                 case "Student":
                     await ShowStudentDashboard();
@@ -123,9 +127,6 @@ namespace MoodleSystem.Console.Views
         {
             Writer.WriteHeader("STUDENT MOJI KOLEGIJI");
 
-            Writer.WriteMessage($"DEBUG CURRENT USER ID = {CurrentUser.User?.Id}");
-            Writer.WaitForKey();
-
             var response = await _studentActions.GetMyCoursesAsync();
 
             if (!response.Courses.Any())
@@ -135,7 +136,7 @@ namespace MoodleSystem.Console.Views
                 return;
             }
 
-            for(int i = 0; i < response.Courses.Count; i++)
+            for (int i = 0; i < response.Courses.Count; i++)
             {
                 var c = response.Courses[i];
                 System.Console.WriteLine($"{i + 1}. {c.Name} Nastavnik: {c.Professor}");
@@ -313,8 +314,85 @@ namespace MoodleSystem.Console.Views
 
         public async Task ShowProfessorCourses()
         {
-            Writer.WriteMessage("jos ne.");
+            Writer.WriteHeader("PROFESOR MOJI KOLEGIJI");
+
+            var response = await _professorActions.GetMyCoursesAsync();
+
+            if (!response.Courses.Any())
+            {
+                Writer.WriteMessage("Nemate niti jedan kolegij. ");
+                Writer.WaitForKey();
+                return;
+            }
+
+            for (int i = 0; i < response.Courses.Count; i++)
+            {
+                var c = response.Courses[i];
+                System.Console.WriteLine($"{i + 1}. {c.Name}");
+            }
+            var input = Reader.ReadInt("\nOdaberite kolegij, za izlaz odaberite 0: ");
+
+            if (!input.HasValue || input.Value == 0)
+                return;
+
+            if (input.Value < 1 || input.Value > response.Courses.Count)
+            {
+                Writer.WriteMessage("Krivi unos.");
+                Writer.WaitForKey();
+                return;
+            }
+
+            var selectedCourse = response.Courses[input.Value - 1];
+            await ShowProfessorCourseScreen(selectedCourse.CourseId);
+        }
+
+        private async Task ShowProfessorCourseScreen(int courseId)
+        {
+
+            Writer.WriteHeader("KOLEGIJ");
+
+            var response = await _professorActions.GetCourseScreenAsync(courseId);
+            Writer.WriteMessage("STUDENTI");
+            if (!response.Students.Any())
+            {
+                Writer.WriteMessage("Nema upisanih studenata.");
+            }
+            else
+            {
+                foreach (var s in response.Students)
+                {
+                    Writer.WriteMessage($"{s.FirstName} {s.LastName}");
+                }
+            }
+
+            Writer.WriteMessage("\nOBAVIJESTI");
+            if (!response.Announcements.Any())
+            {
+                Writer.WriteMessage("Nema obavijesti.");
+            }
+            else
+            {
+                foreach (var a in response.Announcements)
+                {
+                    Writer.WriteMessage($"{a.CreatedAt:g} | {a.Title}");
+                }
+            }
+
+            // 📚 MATERIJALI
+            Writer.WriteMessage("\nMATERIJALI");
+            if (!response.Materials.Any())
+            {
+                Writer.WriteMessage("Nema materijala.");
+            }
+            else
+            {
+                foreach (var m in response.Materials)
+                {
+                    Writer.WriteMessage($"{m.CreatedAt:g} | {m.Name} | {m.Url}");
+                }
+            }
             Writer.WaitForKey();
+
         }
 
         public async Task ProfessorCourseManagement()

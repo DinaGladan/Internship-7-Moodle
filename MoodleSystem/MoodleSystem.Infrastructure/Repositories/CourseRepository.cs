@@ -38,6 +38,15 @@ namespace MoodleSystem.Infrastructure.Repositories
                 .Include(c => c.Professor)
                 .ToListAsync();
         }
-
+        public async Task<Course?> GetByIdWithDetailsAsync(int courseId)
+        {
+            return await _moodleDb.Courses
+                .AsSplitQuery() //za warnning
+                .Include(c => c.Enrollments)
+                    .ThenInclude(e => e.User)
+                .Include(c => c.Announcements)
+                .Include(c => c.Materials)
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+        }
     }
 }
