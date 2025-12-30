@@ -35,7 +35,7 @@ namespace MoodleSystem.Application.Professor.ManageProfessorCoursesScreen.AddStu
                 };
             }
 
-            if(course.ProfessorId != req.CourseId)
+            if(course.ProfessorId != professorId)
             {
                 return new AddStudentToCourseResponse
                 {

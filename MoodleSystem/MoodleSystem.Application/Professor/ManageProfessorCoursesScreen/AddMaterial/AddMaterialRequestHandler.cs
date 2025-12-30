@@ -1,16 +1,16 @@
 ﻿using MoodleSystem.Application.Common.Model;
 using MoodleSystem.Domain.Entities;
+using MoodleSystem.Domain.Persistence.Common;
 using MoodleSystem.Domain.Persistence.Courses;
-using MoodleSystem.Infrastructure.Repositories;
 
 namespace MoodleSystem.Application.Professor.ManageProfessorCoursesScreen.AddMaterial
 {
     public class AddMaterialRequestHandler
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICourseRepository _courseRepository;
 
-        public AddMaterialRequestHandler(UnitOfWork unitOfWork, ICourseRepository courseRepository)
+        public AddMaterialRequestHandler(IUnitOfWork unitOfWork, ICourseRepository courseRepository)
         {
             _unitOfWork = unitOfWork;
             _courseRepository = courseRepository;
@@ -54,8 +54,7 @@ namespace MoodleSystem.Application.Professor.ManageProfessorCoursesScreen.AddMat
                 courseId: req.CourseId
             );
 
-            course.Materials.Add( material );
-
+            await _courseRepository.AddMaterialAsync(material);
             await _unitOfWork.SaveChangesAsync();
 
             return new AddMaterialResponse

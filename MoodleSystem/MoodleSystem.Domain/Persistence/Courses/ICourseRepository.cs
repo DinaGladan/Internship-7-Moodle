@@ -10,5 +10,7 @@ namespace MoodleSystem.Domain.Persistence.Courses
         Task<int>StudentCountAsync(int courseId);
         Task<IEnumerable<Course>> GetAllWithEnrollmentsAsync();
         Task<Course?> GetByIdWithDetailsAsync(int courseId);
+        Task AddMaterialAsync(Material material);
+        Task AddAnnouncementAsync(Announcement announcement);
     }
 }

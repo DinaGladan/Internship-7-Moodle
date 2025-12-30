@@ -378,7 +378,6 @@ namespace MoodleSystem.Console.Views
                 }
             }
 
-            // 📚 MATERIJALI
             Writer.WriteMessage("\nMATERIJALI");
             if (!response.Materials.Any())
             {
@@ -397,8 +396,146 @@ namespace MoodleSystem.Console.Views
 
         public async Task ProfessorCourseManagement()
         {
-            Writer.WriteMessage("jos ne");
+            Writer.WriteHeader("UPRAVLJANJE KOLEGIJIMA");
+
+            var response = await _professorActions.GetMyCoursesAsync();
+
+            if (!response.Courses.Any())
+            {
+                Writer.WriteMessage("Nemate niti jedan kolegij. ");
+                Writer.WaitForKey();
+                return;
+            }
+
+            for (int i = 0; i < response.Courses.Count; i++)
+            {
+                var c = response.Courses[i];
+                System.Console.WriteLine($"{i + 1}. {c.Name}");
+            }
+            var input = Reader.ReadInt("\nOdaberite kolegij, za izlaz odaberite 0: ");
+
+            if (!input.HasValue || input.Value == 0)
+                return;
+
+            if (input.Value < 1 || input.Value > response.Courses.Count)
+            {
+                Writer.WriteMessage("Krivi unos.");
+                Writer.WaitForKey();
+                return;
+            }
+
+            var selectedCourse = response.Courses[input.Value - 1];
+            await ManagementProfessorCoursesScreen(selectedCourse.CourseId);
+
             Writer.WaitForKey();
+        }
+
+        private async Task ManagementProfessorCoursesScreen(int courseId)
+        {
+            bool back = false;
+            while (!back)
+            {
+                Writer.WriteHeader("KOLEGIJ MANAGEMENT SCREEN");
+                System.Console.WriteLine("1. Dodaj obavijest\n\"2. Dodaj materijal\n3. Dodaj studenta\n4. Povratak");
+                var choice = Reader.ReadMenuChoice();
+
+                switch (choice)
+                {
+                    case "1":
+                        await AddNewAnnouncement(courseId);
+                        break;
+
+                    case "2":
+                        await AddNewMaterial(courseId);
+                        break;
+
+                    case "3":
+                        await AddNewStudent(courseId);
+                        break;
+
+                    case "4":
+                        back = true;
+                        break;
+
+                    default:
+                        Writer.WriteMessage("Krivi unos.");
+                        Writer.WaitForKey();
+                        break;
+                }
+            }
+        }
+
+        private async Task AddNewAnnouncement(int courseId)
+        {
+            Writer.WriteHeader("NOVA OBAVIJEST");
+
+            var title = Reader.ReadInput("Naslov: ");
+            var content = Reader.ReadInput("Sadrzaj: ");
+
+            var response = await _professorActions.AddAnnouncement(courseId, title, content);
+
+            if (!response.Success)
+                Writer.WriteMessage(response.Message);
+            else
+                Writer.WriteMessage("Obavijest objavljena!");
+            Writer.WaitForKey();
+        }
+
+        private async Task AddNewMaterial(int courseId)
+        {
+            Writer.WriteHeader("NOVI MATERIJAL");
+
+            var name = Reader.ReadInput("Naziv: ");
+            var url = Reader.ReadInput("Url: ");
+
+            var response = await _professorActions.AddMaterial(courseId, name, url);
+            if(!response.Success)
+                Writer.WriteMessage(response.Message);
+            else
+                Writer.WriteMessage("Materijal objavljena!");
+            Writer.WaitForKey();
+        }
+
+        private async Task AddNewStudent(int courseId)
+        {
+            Writer.WriteHeader("DODAJ STUDENTA");
+
+            var students = await _professorActions.GetAllStudentsAsync();
+
+            if (!students.Any())
+            {
+                Writer.WriteMessage("Nemate studenata na ovom kolegiju");
+                Writer.WaitForKey();
+                return;
+            }
+
+            for(int i= 0; i< students.Count; i++)
+            {
+                Writer.WriteMessage($"{i + 1}. {students[i].FullName}");
+            }
+
+            var input = Reader.ReadInt("Odaberite studenta, upisite 0 za nazad.");
+
+            if (!input.HasValue || input.Value == 0)
+                return;
+
+            if(input<1 || input.Value > students.Count)
+            {
+                Writer.WriteMessage("Krivi unos");
+                Writer.WaitForKey();
+                return;
+            }
+
+            var selectedStudent = students[input.Value - 1];
+
+            var response = await _professorActions.AddStudent(courseId,selectedStudent.Id);
+
+            if(!response.Success)
+                Writer.WriteMessage(response.Message);
+            else
+                Writer.WriteMessage("Student dodan na kolegij");
+            Writer.WaitForKey();
+           
         }
 
         public async Task AdminUsersManagement()

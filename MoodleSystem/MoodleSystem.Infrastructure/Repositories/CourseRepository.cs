@@ -8,7 +8,7 @@ namespace MoodleSystem.Infrastructure.Repositories
 {
     public class CourseRepository : Repository<Course, int>, ICourseRepository
     {
-        private readonly MoodleDbContext _moodleDb;
+        protected readonly MoodleDbContext _moodleDb;
         public CourseRepository(MoodleDbContext moodleDb) : base(moodleDb)
         {
             _moodleDb = moodleDb;
@@ -47,6 +47,16 @@ namespace MoodleSystem.Infrastructure.Repositories
                 .Include(c => c.Announcements)
                 .Include(c => c.Materials)
                 .FirstOrDefaultAsync(c => c.Id == courseId);
+        }
+
+        public async Task AddMaterialAsync(Material material)
+        {
+            await _moodleDb.Materials.AddAsync(material);
+        }
+
+        public async Task AddAnnouncementAsync(Announcement announcement)
+        {
+            await _moodleDb.Announcements.AddAsync(announcement);
         }
     }
 }

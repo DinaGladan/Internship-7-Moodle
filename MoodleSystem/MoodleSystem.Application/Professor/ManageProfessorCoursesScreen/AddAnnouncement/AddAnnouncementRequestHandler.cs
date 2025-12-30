@@ -45,7 +45,7 @@ namespace MoodleSystem.Application.Professor.ManageProfessorCoursesScreen.AddAnn
                 courseId: req.CourseId
             );
 
-            course.Announcements.Add( announcement );
+            await _courseRepository.AddAnnouncementAsync( announcement );
             await _unitOfWork.SaveChangesAsync();
 
             return new AddAnnouncementResponse
