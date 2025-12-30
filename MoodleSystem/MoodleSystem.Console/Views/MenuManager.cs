@@ -3,6 +3,7 @@ using MoodleSystem.Application.Common.Model;
 using MoodleSystem.Console.Actions;
 using MoodleSystem.Console.Helpers;
 using MoodleSystem.Domain.Entities;
+using MoodleSystem.Domain.Enumerations;
 
 namespace MoodleSystem.Console.Views
 {
@@ -13,14 +14,16 @@ namespace MoodleSystem.Console.Views
         private readonly StudentActions _studentActions;
         private readonly ProfessorActions _professorActions;
         private readonly PrivateMessageAction _privateMessageAction;
+        private readonly AdminActions _adminActions;
 
-        public MenuManager(UserActions userActions, DashRequestHandler dashRequestHandler, StudentActions studentActions, PrivateMessageAction privateMessageAction, ProfessorActions professorActions)
+        public MenuManager(UserActions userActions, DashRequestHandler dashRequestHandler, StudentActions studentActions, PrivateMessageAction privateMessageAction, ProfessorActions professorActions, AdminActions adminActions)
         {
             _userActions = userActions;
             _dashRequestHandler = dashRequestHandler;
             _studentActions = studentActions;
             _privateMessageAction = privateMessageAction;
             _professorActions = professorActions;
+            _adminActions = adminActions;
         }
 
         public async Task RunAsync()
@@ -540,10 +543,132 @@ namespace MoodleSystem.Console.Views
 
         public async Task AdminUsersManagement()
         {
-            Writer.WriteMessage("jos ne");
-            Writer.WaitForKey();
+            bool back = false;
+
+            while(!back)
+            {
+                Writer.WriteHeader("ADMIN MANAGEMENT SCREEN");
+                System.Console.WriteLine("1. Obrisi korisnika\n2. Azuriraj email \n3. Promjeni rolu\n4. Povratak");
+                var choice = Reader.ReadMenuChoice();
+
+                switch (choice)
+                {
+                    case "1":
+                        await DeleteUser();
+                        break;
+
+                    case "2":
+                        await UpdateEmail();
+                        break;
+
+                    case "3":
+                        await ChangeRole();
+                        break;
+
+                    case "4":
+                        back = true;
+                        break;
+
+                    default:
+                        Writer.WriteMessage("Krivi unos.");
+                        Writer.WaitForKey();
+                        break;
+                }
+            }
         }
 
+        private async Task DeleteUser()
+        {
+            Writer.WriteHeader("OBRISI KORISNIKA");
+            var students = await _adminActions.GetUsersByRole(UserRole.Student);
+            var professors = await _adminActions.GetUsersByRole(UserRole.Professor);
+            var users = students.Concat(professors).ToList();
+
+            if (!users.Any())
+            {
+                Writer.WriteMessage("Nema ni studenat ni profesora");
+                Writer.WaitForKey();
+                return;
+            }
+
+            for(int i = 0; i< users.Count; i++)
+            {
+                Writer.WriteMessage($"{i + 1}. {users[i].FirstName} {users[i].LastName} - {users[i].Role}");
+            }
+
+            var input = Reader.ReadInt("Unesite zeljenog korisnika, za nazad 0");
+
+            if (!input.HasValue || input.Value == 0)
+                return;
+
+            var selected = users[input.Value - 1];
+
+            await _adminActions.DeleteUser(selected.Id);
+            Writer.WriteMessage("Korisnik obrisan"); //popravi za unos nepravilnog broja, iz DeleteUserAdminRequestHandler
+            Writer.WaitForKey();
+        }
+        private async Task UpdateEmail()
+        {
+            Writer.WriteHeader("AZURIRANJE EMAILA");
+            var students = await _adminActions.GetUsersByRole(UserRole.Student);
+            var professors = await _adminActions.GetUsersByRole(UserRole.Professor);
+            var users = students.Concat(professors).ToList();
+
+            if (!users.Any())
+            {
+                Writer.WriteMessage("Nema ni studenat ni profesora");
+                Writer.WaitForKey();
+                return;
+            }
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                Writer.WriteMessage($"{i + 1}. {users[i].FirstName} {users[i].LastName} - {users[i].Email}");
+            }
+
+            var input = Reader.ReadInt("Unesite zeljenog korisnika, za nazad 0");
+            if (!input.HasValue || input.Value == 0)
+                return;
+
+            var selected = users[input.Value - 1];
+            var email = Reader.ReadInput("Unesite novi email: ");
+
+            await _adminActions.UpdateEmail(selected.Id, email);
+            Writer.WriteMessage("Email azuriran"); //ne uvik ispisat, ispisat da ne valja ako nije validiran
+            Writer.WaitForKey();
+
+        }
+
+        private async Task ChangeRole()
+        {
+            Writer.WriteHeader("PROMJENA ROLE");
+            var students = await _adminActions.GetUsersByRole(UserRole.Student);
+            var professors = await _adminActions.GetUsersByRole(UserRole.Professor);
+            var users = students.Concat(professors).ToList();
+
+            if (!users.Any())
+            {
+                Writer.WriteMessage("Nema ni studenat ni profesora");
+                Writer.WaitForKey();
+                return;
+            }
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                Writer.WriteMessage($"{i + 1}. {users[i].FirstName} {users[i].LastName} - {users[i].Role}");
+            }
+
+            var input = Reader.ReadInt("Unesite zeljenog korisnika, za nazad 0");
+            if (!input.HasValue || input.Value == 0)
+                return;
+
+            var selected = users[input.Value - 1];
+            var role = selected.Role == UserRole.Student ? UserRole.Professor : UserRole.Student;
+
+            await _adminActions.ChangeRole(selected.Id, role);
+            Writer.WriteMessage("Promijenjena rola");
+            Writer.WaitForKey();
+        }
 
     }
 }

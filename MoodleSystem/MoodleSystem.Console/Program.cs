@@ -17,6 +17,7 @@ builder.Services.AddScoped<MenuManager>();
 builder.Services.AddScoped<UserActions>();
 builder.Services.AddScoped<StudentActions>();
 builder.Services.AddScoped<ProfessorActions>();
+builder.Services.AddScoped<AdminActions>();
 builder.Services.AddScoped <PrivateMessageAction>();
 
 
