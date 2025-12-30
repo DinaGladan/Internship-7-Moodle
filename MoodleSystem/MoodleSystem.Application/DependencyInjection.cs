@@ -17,6 +17,7 @@ using MoodleSystem.Application.Professor.ManageProfessorCoursesScreen.AddMateria
 using MoodleSystem.Application.Professor.ManageProfessorCoursesScreen.AddStudentToCourse;
 using MoodleSystem.Application.Professor.MyCourses;
 using MoodleSystem.Application.Professor.ProfessorCoursesScreen;
+using MoodleSystem.Application.Statistics;
 using MoodleSystem.Application.Student.MyCourses;
 using MoodleSystem.Application.Student.StudentCoursesScreen;
 using MoodleSystem.Infrastructure;
@@ -54,6 +55,8 @@ namespace MoodleSystem.Application
 
             services.AddScoped<MyCoursesStudentRequestHandler>();
             services.AddScoped<StudentCorsesScreenRequestHandler>();
+
+            services.AddScoped<StatisticsRequestHandler>();
 
             return services;
 

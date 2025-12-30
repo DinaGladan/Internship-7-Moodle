@@ -1,4 +1,5 @@
-﻿using MoodleSystem.Application.Common.DashBoard;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using MoodleSystem.Application.Common.DashBoard;
 using MoodleSystem.Application.Common.Model;
 using MoodleSystem.Console.Actions;
 using MoodleSystem.Console.Helpers;
@@ -548,7 +549,7 @@ namespace MoodleSystem.Console.Views
             while(!back)
             {
                 Writer.WriteHeader("ADMIN MANAGEMENT SCREEN");
-                System.Console.WriteLine("1. Obrisi korisnika\n2. Azuriraj email \n3. Promjeni rolu\n4. Povratak");
+                System.Console.WriteLine("1. Obrisi korisnika\n2. Azuriraj email \n3. Promjeni rolu\n4. Prikazi statistike\n5. Povratak");
                 var choice = Reader.ReadMenuChoice();
 
                 switch (choice)
@@ -566,6 +567,10 @@ namespace MoodleSystem.Console.Views
                         break;
 
                     case "4":
+                        await ShowStatistics();
+                        break;
+
+                    case "5":
                         back = true;
                         break;
 
@@ -667,6 +672,84 @@ namespace MoodleSystem.Console.Views
 
             await _adminActions.ChangeRole(selected.Id, role);
             Writer.WriteMessage("Promijenjena rola");
+            Writer.WaitForKey();
+        }
+
+        public async Task ShowStatistics()
+        {
+            bool back = false;
+            while (!back)
+            {
+                Writer.WriteHeader("STATISTIKE");
+                System.Console.WriteLine("1. Danas\n2. Ovaj mjesec \n3. Ukupno\n4. Povratak");
+                var choice = Reader.ReadMenuChoice();
+
+                DateTime from = DateTime.UtcNow;
+                DateTime to = DateTime.UtcNow;
+
+                switch (choice)
+                {
+                    case "1":
+                        from = DateTime.UtcNow.Date;
+                        break;
+
+                    case "2":
+                        from = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+                        break;
+
+                    case "3":
+                        from = DateTime.MinValue;
+                        break;
+
+                    case "4":
+                        back = true;
+                        continue;
+
+                    default:
+                        Writer.WriteMessage("Krivi unos.");
+                        Writer.WaitForKey();
+                        break;
+                }
+
+                await PrinstStatistics(from, to);
+            }
+
+        }
+
+        private async Task PrinstStatistics(DateTime from, DateTime to)
+        {
+            Writer.WriteHeader("STATISTIKE");
+            var statistics = await _adminActions.GetStatistics(from, to);
+
+            Writer.WriteMessage($"Broj korisnika: {statistics.UserCount}");
+
+            Writer.WriteMessage($"Broj kolegija: {statistics.CourseCount}");
+
+            Writer.WriteMessage("\nTop 3 kolegija po broju studenata: ");
+
+            if (!statistics.Top3Courses.Any())
+                Writer.WriteMessage("Nema kolegija");
+            else
+            {
+                for(int i = 0;i< statistics.Top3Courses.Count;i++)
+                {
+                    var course = statistics.Top3Courses[i];
+                    Writer.WriteMessage($"{i + 1}. {course.CourseName} - ima {course.StudentCount} studenata");
+                }
+            }
+
+            Writer.WriteMessage("\nTop 3 studenta po broju poruka: ");
+            if (!statistics.Top3Users.Any())
+                Writer.WriteMessage("Nema korisnika");
+            else
+            {
+                for(int i = 0; i< statistics.Top3Users.Count; i++)
+                {
+                    var user = statistics.Top3Users[i];
+                    Writer.WriteMessage($"{i + 1}. {user.FullName} - ima {user.MessageCount} poruka");
+                }
+            }
+
             Writer.WaitForKey();
         }
 
