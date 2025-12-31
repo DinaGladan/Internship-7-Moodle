@@ -2,6 +2,7 @@
 using MoodleSystem.Console.Actions;
 using MoodleSystem.Console.Helpers;
 using MoodleSystem.Domain.Enumerations;
+using System.ComponentModel.Design.Serialization;
 
 namespace MoodleSystem.Console.Views
 {
@@ -80,49 +81,63 @@ namespace MoodleSystem.Console.Views
         public async Task ShowStudentDashboard()
         {
             bool logout = false;
+            var menu = MenuOptions.CreateStudentMenu(this);
+
             while (!logout)
             {
-                var menu = MenuOptions.CreateStudentMenu(this);
-                Writer.DisplayMenu("STUDENT IZBORNIK", menu);
+                var labels = menu.Values
+                    .Select(v => v.Description)
+                    .ToList();
 
-                var choice = Reader.ReadMenuChoice();
+                int index = MenuNavigator.Navigate("STUDENT IZBORNIK", labels);
 
-                if (menu.ContainsKey(choice))
-                    logout = await menu[choice].Action();
-                else
-                    Writer.WriteMessage("Krivi unos");
+                if (index == -1)
+                    return;
+                var action = menu.ElementAt(index).Value.Action;
+                logout = await action();
             }
         }
+
+        
 
         public async Task ShowProfessorDashboard()
         {
             bool logout = false;
+            var menu = MenuOptions.CreateProfessorMenu(this);
+
             while (!logout)
             {
-                Writer.DisplayMenu("PROFESOR IZBORNIK", MenuOptions.CreateProfessorMenu(this));
+                var labels = menu.Values
+                    .Select(v => v.Description)
+                    .ToList();
 
-                var choice = Reader.ReadMenuChoice();
+                int index = MenuNavigator.Navigate("PROFESOR IZBORNIK", labels);
 
-                if (MenuOptions.CreateProfessorMenu(this).ContainsKey(choice))
-                    logout = await MenuOptions.CreateProfessorMenu(this)[choice].Action();
-                else
-                    Writer.WriteMessage("Krivi unos");
+                if (index == -1)
+                    return;
+
+                var action = menu.ElementAt(index).Value.Action;
+                logout = await action();
             }
         }
 
         public async Task ShowAdminDashboard()
         {
             bool logout = false;
+            var menu = MenuOptions.CreateAdminMenu(this);
+
             while (!logout)
             {
-                Writer.DisplayMenu("ADMIN IZBORNIK", MenuOptions.CreateAdminMenu(this));
+                var labels = menu.Values
+                    .Select(v => v.Description)
+                    .ToList();
 
-                var choice = Reader.ReadMenuChoice();
+                int index = MenuNavigator.Navigate("ADMIN IZBORNIK", labels);
+                if (index == -1)
+                    return;
 
-                if (MenuOptions.CreateAdminMenu(this).ContainsKey(choice))
-                    logout = await MenuOptions.CreateAdminMenu(this)[choice].Action();
-                else
-                    Writer.WriteMessage("Krivi unos");
+                var action = menu.ElementAt(index).Value.Action;
+                logout = await action();
             }
         }
 
