@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MoodleSystem.Domain.DTOs;
 using MoodleSystem.Domain.Persistence.Statistics;
 using MoodleSystem.Infrastructure.DTO;
 using MoodleSystem.Infrastructure.Persistence;
@@ -45,6 +46,20 @@ namespace MoodleSystem.Infrastructure.Repositories
                .OrderByDescending(umc => umc.Count)
                .Take(3)
                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RoleCountDTO>> GetUsersCountByRole(DateTime startTime, DateTime endTime)
+        {
+            return await _moodleDb.Users
+                .Where(u => u.CreatedAt >= startTime && u.CreatedAt <= endTime)
+                .GroupBy(u => u.Role)
+                .Select(u => new RoleCountDTO
+                {
+                    Role = u.Key.ToString(),
+                    Count = u.Count()
+                })
+                .OrderByDescending(u => u.Count)
+                .ToListAsync();
         }
     }
 }

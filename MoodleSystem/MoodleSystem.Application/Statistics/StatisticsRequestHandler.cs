@@ -23,18 +23,16 @@ namespace MoodleSystem.Application.Statistics
 
         public async Task<StatisticsResponse> StatisticHandler(DateTime from, DateTime to)
         {
-            var topCoursesInfra =
-                await _statisticRepository.Top3CoursesByStudentsAsync(from, to);
+            var topCoursesInfra = await _statisticRepository.Top3CoursesByStudentsAsync(from, to);
 
-            var topUsersInfra =
-                await _statisticRepository.Top3UsersBySentMessagesAsync(from, to);
+            var topUsersInfra = await _statisticRepository.Top3UsersBySentMessagesAsync(from, to);
 
             var courses = await _courseRepository.GetAllAsync();
             var users = await _userRepository.GetAllAsync();
 
             return new StatisticsResponse
             {
-                UserCount = await _statisticRepository.CountUsersAsync(from, to),
+                RoleCounts = (await _statisticRepository.GetUsersCountByRole(from, to)).ToList(),
                 CourseCount = await _statisticRepository.CountCoursesAsync(from, to),
 
                 Top3Courses = topCoursesInfra

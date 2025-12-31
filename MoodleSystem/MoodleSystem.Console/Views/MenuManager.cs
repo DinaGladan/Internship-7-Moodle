@@ -721,9 +721,13 @@ namespace MoodleSystem.Console.Views
             Writer.WriteHeader("STATISTIKE");
             var statistics = await _adminActions.GetStatistics(from, to);
 
-            Writer.WriteMessage($"Broj korisnika: {statistics.UserCount}");
+            Writer.WriteMessage($"Broj korisnika:");
+            foreach(var r in statistics.RoleCounts)
+            {
+                Writer.WriteMessage($"{r.Role}: {r.Count}");
+            }
 
-            Writer.WriteMessage($"Broj kolegija: {statistics.CourseCount}");
+            Writer.WriteMessage($"\nBroj kolegija: {statistics.CourseCount}");
 
             Writer.WriteMessage("\nTop 3 kolegija po broju studenata: ");
 
