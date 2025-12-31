@@ -15,7 +15,6 @@ namespace MoodleSystem.Application.Common.Model.LogIn
             var user = await _userRepository.GetByEmailAsync(req.Email);
             if (user == null || user.Password != req.Password)
             {
-                await Task.Delay(30000);
                 return new LogInResponse
                 {
                     Success = false,

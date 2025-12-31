@@ -4,6 +4,7 @@
     {
         public static void DisplayMenu(string title, Dictionary<string, (string Description, Func<Task<bool>> Action)> options)
         {
+            System.Console.Clear();
             System.Console.WriteLine($"\n=== {title} ===");
 
             foreach (var option in options)

@@ -33,14 +33,14 @@ namespace MoodleSystem.Console.Actions
             if (!response.Success)
             {
                 Writer.WriteMessage(response.Message);
+                Writer.WriteMessage("Pokusajte ponovno za 30 sekundi...");
+                await Task.Delay(30000);
+                Writer.WriteMessage("Prosao timeout");
                 Writer.WaitForKey();
                 return false;
             }
 
-            CurrentUser.Set(response.User);
-            Writer.WriteMessage($"DEBUG AFTER LOGIN: CurrentUser = {CurrentUser.User?.Email}");
-            Writer.WaitForKey();
-
+            CurrentUser.Set(response.User!);
 
             Writer.WriteMessage("Uspjesna prijava");
             Writer.WaitForKey();

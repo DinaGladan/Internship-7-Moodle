@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using MoodleSystem.Application.Common.DashBoard;
-using MoodleSystem.Application.Common.Model;
+﻿using MoodleSystem.Application.Common.DashBoard;
 using MoodleSystem.Console.Actions;
 using MoodleSystem.Console.Helpers;
-using MoodleSystem.Domain.Entities;
 using MoodleSystem.Domain.Enumerations;
 
 namespace MoodleSystem.Console.Views
@@ -52,9 +49,12 @@ namespace MoodleSystem.Console.Views
 
         public async Task HandleLogIn()
         {
-            var success = await _userActions.LogInAsync();
-            if (!success)
-                return;
+            bool loggedIn = false;
+            
+            while (!loggedIn)
+            {
+                loggedIn = await _userActions.LogInAsync();
+            }
 
             var dash = _dashRequestHandler.DashHandler();
 
