@@ -172,14 +172,14 @@ namespace MoodleSystem.Console.Views
                 Writer.WriteMessage("Nema obavijesti.");
             else
                 foreach (var a in response.Announcements)
-                    System.Console.WriteLine($"{a.CreatedAt:g} {a.Title} - {a.Professor}");
+                    System.Console.WriteLine($"{a.CreatedAt:g} - {a.Professor} - {a.Title}");
 
             Writer.WriteMessage("\nMATERIJALI");
             if (!response.Materials.Any())
                 Writer.WriteMessage("Nema materijala.");
             else
                 foreach (var m in response.Materials)
-                    System.Console.WriteLine($"{m.CreatedAt:g} {m.Name} {m.Url}");
+                    System.Console.WriteLine($"{m.CreatedAt:g} - {m.Name} {m.Url}");
 
             Writer.WaitForKey();
         }
@@ -608,8 +608,11 @@ namespace MoodleSystem.Console.Views
 
             var selected = users[input.Value - 1];
 
-            await _adminActions.DeleteUser(selected.Id);
-            Writer.WriteMessage("Korisnik obrisan"); //popravi za unos nepravilnog broja, iz DeleteUserAdminRequestHandler
+            var response = await _adminActions.DeleteUser(selected.Id);
+            if (!response.Success)
+                Writer.WriteMessage(response.Message);
+            else
+                Writer.WriteMessage("Korisnik obrisan");
             Writer.WaitForKey();
         }
         private async Task UpdateEmail()
@@ -638,8 +641,11 @@ namespace MoodleSystem.Console.Views
             var selected = users[input.Value - 1];
             var email = Reader.ReadInput("Unesite novi email: ");
 
-            await _adminActions.UpdateEmail(selected.Id, email);
-            Writer.WriteMessage("Email azuriran"); //ne uvik ispisat, ispisat da ne valja ako nije validiran
+            var response = await _adminActions.UpdateEmail(selected.Id, email);
+            if(!response.Success)
+                Writer.WriteMessage(response.Message);
+            else
+                Writer.WriteMessage("Email azuriran");
             Writer.WaitForKey();
 
         }

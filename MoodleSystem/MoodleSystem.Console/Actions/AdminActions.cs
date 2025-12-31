@@ -30,21 +30,24 @@ namespace MoodleSystem.Console.Actions
             return users.ToList();
         }
 
-        public async Task DeleteUser(int userId)
+        public async Task<DeleteUserAdminResponse> DeleteUser(int userId)
         {
-            await _deleteUserAdminRequestHandler.AdminHandler(new DeleteUserAdminRequest
+            var req = new DeleteUserAdminRequest
             {
                 UserId = userId
-            });
+            };
+            return await _deleteUserAdminRequestHandler.AdminHandler(req);
         }
 
-        public async Task UpdateEmail(int userId, string email)
+        public async Task<UpdateUserEmailAdminResponse>UpdateEmail(int userId, string email)
         {
-            await _updateUserEmailAdminRequestHandler.AdminHandler(new UpdateUserEmailAdminRequest
+            var req = new UpdateUserEmailAdminRequest
             {
                 UserId = userId,
                 UserNewEmail = email
-            });
+            };
+
+            return await _updateUserEmailAdminRequestHandler.AdminHandler(req);
         }
 
         public async Task ChangeRole(int userId, UserRole role)
