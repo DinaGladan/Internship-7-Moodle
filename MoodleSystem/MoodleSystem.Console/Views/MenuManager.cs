@@ -32,20 +32,19 @@ namespace MoodleSystem.Console.Views
 
             while (!exitRequested)
             {
-                Writer.DisplayMenu("MOODLE SYSTEM - GLAVNI IZBORNIK", mainMenuOptions);
-                var choice = Reader.ReadMenuChoice();
+                var labels = mainMenuOptions.Values
+                    .Select(v => v.Description)
+                    .ToList();
 
-                if (mainMenuOptions.ContainsKey(choice))
-                {
-                    exitRequested = await mainMenuOptions[choice].Action();
-                }
-                else
-                {
-                    Writer.WriteMessage("Neispravan odabir.");
-                    Writer.WaitForKey();
-                }
+                int index = MenuNavigator.Navigate("MOODLE SYSTEM - GLAVNI IZBORNIK", labels);
+
+                if (index == -1)
+                    return;
+                var action = mainMenuOptions.ElementAt(index).Value.Action;
+                exitRequested = await action();
             }
         }
+
 
         public async Task HandleLogIn()
         {
