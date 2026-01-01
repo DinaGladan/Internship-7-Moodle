@@ -7,8 +7,6 @@ namespace MoodleSystem.Application.Common.DashBoard
     {
         public DashResponse DashHandler()
         {
-            System.Console.WriteLine($"DEBUG DASH: IsLoggedIn = {CurrentUser.IsLoggedIn}");
-            System.Console.WriteLine($"DEBUG DASH: User = {CurrentUser.User?.Email}");
 
             if (!CurrentUser.IsLoggedIn)
                 return new DashResponse { 

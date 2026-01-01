@@ -1,7 +1,6 @@
 ﻿using MoodleSystem.Application.Common.Model;
 using MoodleSystem.Application.DTO;
 using MoodleSystem.Domain.Persistence.PrivateMessages;
-using MoodleSystem.Infrastructure.Repositories;
 
 namespace MoodleSystem.Application.PrivateMsgs.ChatScreen
 {

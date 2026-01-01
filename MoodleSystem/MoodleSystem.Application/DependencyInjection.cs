@@ -4,9 +4,6 @@ using MoodleSystem.Application.Admin.ChangeUserRole;
 using MoodleSystem.Application.Admin.DeleteUser;
 using MoodleSystem.Application.Admin.UpdateUserEmail;
 using MoodleSystem.Application.Common.DashBoard;
-using MoodleSystem.Application.Common.DashBoard.Admin;
-using MoodleSystem.Application.Common.DashBoard.Professor;
-using MoodleSystem.Application.Common.DashBoard.Student;
 using MoodleSystem.Application.Common.Model.LogIn;
 using MoodleSystem.Application.Common.Model.Register;
 using MoodleSystem.Application.PrivateMsgs.ChatScreen;
@@ -34,9 +31,6 @@ namespace MoodleSystem.Application
             services.AddScoped<RegisterRequestHandler>();
 
             services.AddScoped<DashRequestHandler>();
-            services.AddScoped<DashAdminRequestHandler>();
-            services.AddScoped<DashProfessorRequestHandler>();
-            services.AddScoped<DashStudentRequestHandler>();
 
             services.AddScoped<ChangeUserRoleRequestHandler>();
             services.AddScoped<DeleteUserAdminRequestHandler>();

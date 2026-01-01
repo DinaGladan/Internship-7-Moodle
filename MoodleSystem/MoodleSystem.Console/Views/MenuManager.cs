@@ -2,7 +2,6 @@
 using MoodleSystem.Console.Actions;
 using MoodleSystem.Console.Helpers;
 using MoodleSystem.Domain.Enumerations;
-using System.ComponentModel.Design.Serialization;
 
 namespace MoodleSystem.Console.Views
 {
@@ -204,7 +203,7 @@ namespace MoodleSystem.Console.Views
             while (!back)
             {
                 Writer.WriteHeader("PRIVATNI CHAT");
-                System.Console.WriteLine("1. Nova poruka\n\"2. Moji razgovori\n3. Povratak");
+                System.Console.WriteLine("1. Nova poruka\n2. Moji razgovori\n3. Povratak");
                 var choice = Reader.ReadMenuChoice();
 
                 switch (choice)
@@ -231,6 +230,7 @@ namespace MoodleSystem.Console.Views
 
         private async Task OpenExistingConversations()
         {
+            Writer.WriteHeader("MOJI RAZGOVORI");
             var response = await _privateMessageAction.GetMyConversations();
 
             if (!response.PrivateMessages.Any())
@@ -454,7 +454,7 @@ namespace MoodleSystem.Console.Views
             while (!back)
             {
                 Writer.WriteHeader("KOLEGIJ MANAGEMENT SCREEN");
-                System.Console.WriteLine("1. Dodaj obavijest\n\"2. Dodaj materijal\n3. Dodaj studenta\n4. Povratak");
+                System.Console.WriteLine("1. Dodaj obavijest\n2. Dodaj materijal\n3. Dodaj studenta\n4. Povratak");
                 var choice = Reader.ReadMenuChoice();
 
                 switch (choice)

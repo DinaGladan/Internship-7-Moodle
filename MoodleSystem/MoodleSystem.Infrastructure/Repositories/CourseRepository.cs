@@ -43,7 +43,7 @@ namespace MoodleSystem.Infrastructure.Repositories
             return await _moodleDb.Courses
                 .AsSplitQuery() //za warnning
                 .Include(c => c.Enrollments)
-                    .ThenInclude(e => e.User)
+                .ThenInclude(e => e.User)
                 .Include(c => c.Announcements)
                 .Include(c => c.Materials)
                 .FirstOrDefaultAsync(c => c.Id == courseId);

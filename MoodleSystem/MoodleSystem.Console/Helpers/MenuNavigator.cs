@@ -1,6 +1,4 @@
-﻿using MoodleSystem.Console.Helpers;
-
-namespace MoodleSystem.Console.Helpers
+﻿namespace MoodleSystem.Console.Helpers
 {
     public static class MenuNavigator
     {

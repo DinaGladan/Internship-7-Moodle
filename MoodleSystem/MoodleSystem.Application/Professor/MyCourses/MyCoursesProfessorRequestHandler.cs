@@ -18,18 +18,15 @@ namespace MoodleSystem.Application.Professor.MyCourses
             var professorId = CurrentUser.User!.Id;
             var courses = await _courseRepository.GetAllAsync();
 
-            var professorCourses = new List<ProfessorCoursesDTO>();
-
-            foreach(var course in courses.Values.Where(c => c.ProfessorId == professorId))
-            {
-                professorCourses.Add(new ProfessorCoursesDTO
+            var professorCourses = courses.Values
+                .Where(c => c.ProfessorId == professorId)
+                .Select(c => new ProfessorCoursesDTO
                 {
-                    CourseId = course.Id,
-                    Name = course.Name,
-                    StudentCount = await _courseRepository.StudentCountAsync(course.Id)
+                    CourseId = c.Id,
+                    Name = c.Name,
+                    StudentCount =  _courseRepository.StudentCountAsync(c.Id).Result
                 });
-            }
-
+            
             return new MyCoursesProfessorResponse
             {
                 Courses = professorCourses
